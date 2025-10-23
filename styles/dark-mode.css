@@ -1,0 +1,651 @@
+/* Reset dan Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Primary Colors */
+  --primary-blue: #1e2a3a;
+  --secondary-blue: #2d3b4e;
+  --accent-blue: #3498db;
+
+  /* Text Colors - SEPARATED */
+  --text-light: #333333; /* Untuk teks biasa mode terang */
+  --text-dark: #ffffff; /* Untuk teks biasa mode gelap */
+  --code-text-light: #f8f8f2; /* Untuk teks kode mode terang */
+  --code-text-dark: #abb2bf; /* Untuk teks kode mode gelap */
+  --hint-text-light: #666666; /* Untuk teks hint mode terang */
+  --hint-text-dark: #cccccc; /* Untuk teks hint mode gelap */
+
+  /* Background Colors */
+  --bg-light: #f8f9fa;
+  --bg-dark: #1a1a1a;
+  --card-bg-light: #ffffff;
+  --card-bg-dark: #2c3e50;
+  --border-light: #e1e8ed;
+  --border-dark: #34495e;
+
+  /* Status Colors */
+  --success: #27ae60;
+  --warning: #f39c12;
+  --danger: #e74c3c;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  transition: background 0.3s ease;
+}
+
+body.light-mode {
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.logo {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.theme-toggle {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  padding: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.theme-icon {
+  font-size: 1.5rem;
+}
+
+/* Control Panel */
+.control-panel {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.filters {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-select,
+.btn-primary {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-select {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border-light);
+  min-width: 180px;
+  color: var(--text-light); /* Gunakan variabel teks biasa */
+}
+
+.btn-primary {
+  background: var(--accent-blue);
+  color: white;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+/* Cards Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  padding: 20px 0;
+  align-items: start;
+}
+
+/* Card Styles - IMPROVED */
+.flashcard {
+  height: 550px;
+  perspective: 1000px;
+  cursor: pointer;
+  position: relative;
+  margin: 0;
+  transform: translateZ(0);
+}
+
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transform: translateZ(0) rotateY(0deg);
+}
+
+.flashcard.flipped .flashcard-inner {
+  transform: translateZ(0) rotateY(180deg);
+}
+
+.flashcard-front,
+.flashcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 15px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+}
+
+/* Front Card - TCG Style */
+.flashcard-front {
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  border: 3px solid #e67e22;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  position: relative;
+  overflow: hidden;
+  transform: rotateY(0deg);
+}
+
+.flashcard-front::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #e67e22, #f39c12, #e67e22);
+}
+
+.language-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--accent-blue);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  z-index: 2;
+}
+
+.chapter-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: var(--success);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.card-content {
+  margin-top: 60px;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.card-question {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-light); /* Gunakan variabel teks biasa */
+  line-height: 1.4;
+}
+
+/* Back Card - Code Display */
+.flashcard-back {
+  background: var(--primary-blue);
+  transform: rotateY(180deg);
+  border: 3px solid #34495e;
+  color: white;
+}
+
+.code-container {
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  flex-grow: 1;
+  overflow: auto;
+  min-height: 0;
+}
+
+.code-container pre {
+  margin: 0;
+  font-family: "Courier New", monospace;
+  font-size: 0.9rem;
+}
+
+.code-container code {
+  background: none !important;
+  padding: 0 !important;
+  color: var(--code-text-light); /* Gunakan variabel teks kode */
+}
+
+.explanation {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+  color: var(--text-dark); /* Teks penjelasan menggunakan warna teks biasa */
+}
+
+/* Card Actions - POSISI LEBIH BAWAH */
+.card-actions {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 25px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.flashcard:hover .card-actions {
+  opacity: 1;
+}
+
+.btn-action {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+}
+
+.btn-edit {
+  background: rgba(52, 152, 219, 0.9);
+  color: white;
+}
+
+.btn-edit:hover {
+  background: rgba(41, 128, 185, 0.9);
+  transform: translateY(-2px);
+}
+
+.btn-delete {
+  background: rgba(231, 76, 60, 0.9);
+  color: white;
+}
+
+.btn-delete:hover {
+  background: rgba(192, 57, 43, 0.9);
+  transform: translateY(-2px);
+}
+
+.card-hint {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--hint-text-light); /* Gunakan variabel teks hint */
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  padding: 0 20px;
+}
+
+.flashcard:hover .card-hint {
+  opacity: 1;
+}
+
+/* Untuk kartu belakang */
+.flashcard-back .card-actions {
+  bottom: 25px;
+}
+
+.flashcard-back .card-hint {
+  bottom: 5px;
+  color: var(--hint-text-dark); /* Hint gelap untuk mode dark */
+}
+
+/* Danger Button */
+.btn-danger {
+  background: var(--danger);
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+}
+
+/* Confirm Modal */
+.confirm-modal {
+  max-width: 400px;
+}
+
+.modal-body {
+  padding: 20px;
+  text-align: center;
+}
+
+.modal-body p {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 1.1rem;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.modal-header h3 {
+  color: var(--text-light);
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-light);
+}
+
+.modal-form {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.form-group select,
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--border-light);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  color: var(--text-light); /* Warna teks input */
+  background: white;
+}
+
+.form-group select:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.btn-secondary {
+  padding: 12px 20px;
+  border: 2px solid var(--border-light);
+  background: white;
+  color: var(--text-light);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #f8f9fa;
+}
+
+/* No Cards State */
+.no-cards {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: white;
+}
+
+.no-cards h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.no-cards p {
+  opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .header {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .logo {
+    font-size: 2rem;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-select,
+  .btn-primary {
+    width: 100%;
+  }
+
+  .flashcard {
+    height: 650px;
+  }
+
+  .card-actions {
+    opacity: 1;
+    padding: 0 15px;
+    bottom: 50px;
+  }
+
+  .btn-action {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .card-hint {
+    bottom: 5px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding: 5px;
+  }
+
+  .flashcard {
+    height: 300px;
+  }
+
+  .flashcard-front,
+  .flashcard-back {
+    padding: 15px;
+  }
+
+  .card-question {
+    font-size: 1.1rem;
+  }
+
+  .card-actions {
+    bottom: 5px;
+  }
+
+  .card-hint {
+    bottom: 50px;
+  }
+
+  .btn-action {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-blue);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2980b9;
+}
+
+/* Loading state for cards */
+.flashcard.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.flashcard.loading::after {
+  content: "Loading...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  z-index: 10;
+}
