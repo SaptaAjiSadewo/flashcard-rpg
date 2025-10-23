@@ -1,22 +1,36 @@
-// Main Application - WITH EDIT/DELETE
+// Main Application - DIPERBAIKI
 class FlashcardApp {
   constructor() {
     this.storage = new StorageManager();
     this.themeSwitcher = new ThemeSwitcher();
+
+    // Pastikan storage diinisialisasi dulu
+    this.storage.initializeSampleData();
+
     this.cardManager = new CardManager(
       this.storage,
       this.showNotification.bind(this)
+    );
+
+    this.chapterManager = new ChapterManager(
+      this.storage,
+      this.showNotification.bind(this),
+      this.cardManager
     );
 
     this.initializeApp();
   }
 
   initializeApp() {
-    this.storage.initializeSampleData();
+    // Setup modal functionality
     this.setupModal();
     this.setupFilters();
     this.setupEditModal();
+    this.setupChapterModal();
+
+    // Initial render
     this.cardManager.renderCards();
+    this.chapterManager.renderChapters();
 
     console.log("CodeCards App initialized successfully!");
   }
@@ -90,12 +104,12 @@ class FlashcardApp {
     });
   }
 
-  setupFilters() {
-    const languageFilter = document.getElementById("languageFilter");
+  setupChapterModal() {
+    // Chapter modals are handled in ChapterManager
+  }
 
-    languageFilter.addEventListener("change", () => {
-      this.cardManager.refreshChapters();
-    });
+  setupFilters() {
+    // Filters are handled in CardManager and ChapterManager
   }
 
   handleFormSubmit(form) {
@@ -107,7 +121,16 @@ class FlashcardApp {
       explanation: document.getElementById("cardExplanation").value,
     };
 
+    // Validasi
+    if (!cardData.chapter.trim()) {
+      this.showNotification("Bab tidak boleh kosong!", "error");
+      return;
+    }
+
     this.cardManager.addNewCard(cardData);
+
+    // Refresh chapters tabs untuk update statistik
+    this.chapterManager.renderChapters();
   }
 
   showNotification(message, type = "info") {
@@ -115,44 +138,46 @@ class FlashcardApp {
     const notification = document.createElement("div");
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
-            <span>${message}</span>
-            <button class="notification-close">&times;</button>
-        `;
+      <span>${message}</span>
+      <button class="notification-close">&times;</button>
+    `;
 
     // Add styles if not already added
     if (!document.querySelector("#notification-styles")) {
       const styles = document.createElement("style");
       styles.id = "notification-styles";
       styles.textContent = `
-                .notification {
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: #27ae60;
-                    color: white;
-                    padding: 15px 20px;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                    z-index: 1001;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    animation: slideIn 0.3s ease;
-                }
-                .notification-error { background: #e74c3c; }
-                .notification-warning { background: #f39c12; }
-                .notification-close {
-                    background: none;
-                    border: none;
-                    color: white;
-                    font-size: 1.2rem;
-                    cursor: pointer;
-                }
-                @keyframes slideIn {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
-                }
-            `;
+        .notification {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          padding: 15px 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          z-index: 1001;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          animation: slideIn 0.3s ease;
+          color: white;
+          font-weight: 500;
+        }
+        .notification-success { background: #27ae60; }
+        .notification-error { background: #e74c3c; }
+        .notification-warning { background: #f39c12; }
+        .notification-info { background: #3498db; }
+        .notification-close {
+          background: none;
+          border: none;
+          color: white;
+          font-size: 1.2rem;
+          cursor: pointer;
+        }
+        @keyframes slideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+      `;
       document.head.appendChild(styles);
     }
 

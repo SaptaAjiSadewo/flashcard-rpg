@@ -1,4 +1,4 @@
-// Local Storage Management
+// Local Storage Management - DIPERBAIKI
 class StorageManager {
   constructor() {
     this.storageKey = "codecards_flashcards";
@@ -45,22 +45,242 @@ class StorageManager {
     return filteredCards;
   }
 
-  // Chapter methods
+  // Chapter methods - DIPERBAIKI
   getChapters() {
     const chapters = localStorage.getItem(this.chaptersKey);
-    return chapters ? JSON.parse(chapters) : {};
+    if (chapters) {
+      try {
+        return JSON.parse(chapters);
+      } catch (error) {
+        console.error("Error parsing chapters:", error);
+        return this.initializeDefaultChapters();
+      }
+    }
+    return this.initializeDefaultChapters();
   }
 
-  saveChapter(language, chapter) {
+  initializeDefaultChapters() {
+    const defaultChapters = {
+      javascript: [
+        {
+          id: "js-variables",
+          name: "Variabel",
+          description: "Konsep variabel dan tipe data dalam JavaScript",
+          language: "javascript",
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: "js-functions",
+          name: "Fungsi",
+          description: "Pembuatan dan penggunaan fungsi dalam JavaScript",
+          language: "javascript",
+          createdAt: new Date().toISOString(),
+        },
+      ],
+      html: [
+        {
+          id: "html-structure",
+          name: "Struktur Dasar",
+          description: "Dasar-dasar struktur dokumen HTML",
+          language: "html",
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: "html-forms",
+          name: "Formulir",
+          description: "Pembuatan formulir HTML",
+          language: "html",
+          createdAt: new Date().toISOString(),
+        },
+      ],
+      css: [
+        {
+          id: "css-flexbox",
+          name: "Flexbox",
+          description: "Layout fleksibel dengan CSS Flexbox",
+          language: "css",
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: "css-grid",
+          name: "Grid",
+          description: "Layout dengan CSS Grid",
+          language: "css",
+          createdAt: new Date().toISOString(),
+        },
+      ],
+      php: [
+        {
+          id: "php-basics",
+          name: "Dasar PHP",
+          description: "Pengenalan pemrograman server-side dengan PHP",
+          language: "php",
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    };
+
+    try {
+      localStorage.setItem(this.chaptersKey, JSON.stringify(defaultChapters));
+    } catch (error) {
+      console.error("Error saving default chapters:", error);
+    }
+
+    return defaultChapters;
+  }
+
+  saveChapter(chapterData) {
     const chapters = this.getChapters();
-    if (!chapters[language]) {
-      chapters[language] = [];
+    const newChapter = {
+      id: this.generateId(),
+      ...chapterData,
+      createdAt: new Date().toISOString(),
+    };
+
+    // Pastikan language key ada
+    if (!chapters[chapterData.language]) {
+      chapters[chapterData.language] = [];
     }
-    if (!chapters[language].includes(chapter)) {
-      chapters[language].push(chapter);
+
+    // Validasi data chapter
+    if (!newChapter.name || !newChapter.description) {
+      console.error("Chapter data is incomplete:", newChapter);
+      return null;
+    }
+
+    // Cek apakah chapter dengan nama yang sama sudah ada
+    const existingChapter = chapters[chapterData.language].find(
+      (ch) => ch.name.toLowerCase() === chapterData.name.toLowerCase()
+    );
+
+    if (existingChapter) {
+      return existingChapter;
+    }
+
+    chapters[chapterData.language].push(newChapter);
+
+    try {
       localStorage.setItem(this.chaptersKey, JSON.stringify(chapters));
+      return newChapter;
+    } catch (error) {
+      console.error("Error saving chapter:", error);
+      return null;
     }
-    return chapters;
+  }
+
+  updateChapter(chapterId, updatedChapter) {
+    const chapters = this.getChapters();
+
+    // Validasi data
+    if (!updatedChapter.name || !updatedChapter.description) {
+      console.error("Updated chapter data is incomplete:", updatedChapter);
+      return null;
+    }
+
+    for (const language in chapters) {
+      const chapterIndex = chapters[language].findIndex(
+        (ch) => ch.id === chapterId
+      );
+      if (chapterIndex !== -1) {
+        // Jika language berubah, pindahkan chapter ke array language yang baru
+        if (updatedChapter.language && updatedChapter.language !== language) {
+          const movedChapter = chapters[language].splice(chapterIndex, 1)[0];
+          movedChapter.language = updatedChapter.language;
+          movedChapter.updatedAt = new Date().toISOString();
+
+          if (!chapters[updatedChapter.language]) {
+            chapters[updatedChapter.language] = [];
+          }
+          chapters[updatedChapter.language].push(movedChapter);
+        } else {
+          // Update chapter di tempat yang sama
+          chapters[language][chapterIndex] = {
+            ...chapters[language][chapterIndex],
+            ...updatedChapter,
+            updatedAt: new Date().toISOString(),
+          };
+        }
+
+        try {
+          localStorage.setItem(this.chaptersKey, JSON.stringify(chapters));
+          return chapters[updatedChapter.language || language].find(
+            (ch) => ch.id === chapterId
+          );
+        } catch (error) {
+          console.error("Error updating chapter:", error);
+          return null;
+        }
+      }
+    }
+    return null;
+  }
+
+  deleteChapter(chapterId) {
+    const chapters = this.getChapters();
+    let deletedChapter = null;
+
+    for (const language in chapters) {
+      const chapterIndex = chapters[language].findIndex(
+        (ch) => ch.id === chapterId
+      );
+      if (chapterIndex !== -1) {
+        deletedChapter = chapters[language][chapterIndex];
+        chapters[language].splice(chapterIndex, 1);
+
+        // Also delete all flashcards in this chapter
+        this.deleteFlashcardsByChapter(language, deletedChapter.name);
+
+        try {
+          localStorage.setItem(this.chaptersKey, JSON.stringify(chapters));
+          break;
+        } catch (error) {
+          console.error("Error deleting chapter:", error);
+          return null;
+        }
+      }
+    }
+    return deletedChapter;
+  }
+
+  deleteFlashcardsByChapter(language, chapterName) {
+    const cards = this.getFlashcards();
+    const filteredCards = cards.filter(
+      (card) => !(card.language === language && card.chapter === chapterName)
+    );
+    localStorage.setItem(this.storageKey, JSON.stringify(filteredCards));
+    return filteredCards;
+  }
+
+  getChaptersByLanguage(language) {
+    const chapters = this.getChapters();
+    return chapters[language] || [];
+  }
+
+  getChapterById(chapterId) {
+    const chapters = this.getChapters();
+    for (const language in chapters) {
+      const chapter = chapters[language].find((ch) => {
+        // Pastikan chapter ada dan memiliki property yang diperlukan
+        return ch && ch.id === chapterId;
+      });
+      if (chapter) return chapter;
+    }
+    return null;
+  }
+
+  getChapterByName(language, chapterName) {
+    const chapters = this.getChapters();
+    if (chapters[language]) {
+      return chapters[language].find((ch) => ch && ch.name === chapterName);
+    }
+    return null;
+  }
+
+  getFlashcardsByChapter(language, chapterName) {
+    const cards = this.getFlashcards();
+    return cards.filter(
+      (card) => card.language === language && card.chapter === chapterName
+    );
   }
 
   // Utility methods
@@ -81,7 +301,7 @@ class StorageManager {
     });
   }
 
-  // Initialize with sample data if empty
+  // Initialize with sample data if empty - DIPERBAIKI
   initializeSampleData() {
     const cards = this.getFlashcards();
     if (cards.length === 0) {
@@ -101,6 +321,25 @@ const pi = 3.14;
 var old = "old way";`,
           explanation:
             "let untuk variabel yang bisa diubah, const untuk nilai tetap, dan var adalah cara lama dengan function scope.",
+        },
+        {
+          language: "javascript",
+          chapter: "Fungsi",
+          question: "Bagaimana cara membuat arrow function?",
+          code: `// Function biasa
+function regularFunction(a, b) {
+    return a + b;
+}
+
+// Arrow function
+const arrowFunction = (a, b) => {
+    return a + b;
+};
+
+// Arrow function dengan return implisit
+const implicitReturn = (a, b) => a + b;`,
+          explanation:
+            "Arrow function adalah sintaks modern JavaScript yang lebih ringkas dan tidak memiliki binding 'this' sendiri.",
         },
         {
           language: "html",
@@ -144,8 +383,50 @@ var old = "old way";`,
 
       sampleCards.forEach((card) => {
         this.saveFlashcard(card);
-        this.saveChapter(card.language, card.chapter);
       });
+    }
+
+    // Pastikan chapters juga terinisialisasi
+    this.getChapters();
+  }
+
+  // Method untuk membersihkan data yang rusak
+  cleanupCorruptedData() {
+    try {
+      const chapters = this.getChapters();
+      let hasCorruption = false;
+
+      for (const language in chapters) {
+        chapters[language] = chapters[language].filter(
+          (chapter) =>
+            chapter &&
+            chapter.id &&
+            chapter.name &&
+            chapter.description &&
+            chapter.language
+        );
+
+        // Validasi setiap chapter
+        chapters[language].forEach((chapter) => {
+          if (!chapter.name || chapter.name === "undefined") {
+            chapter.name = "Bab Tanpa Nama";
+            hasCorruption = true;
+          }
+          if (!chapter.description || chapter.description === "undefined") {
+            chapter.description = "Deskripsi tidak tersedia";
+            hasCorruption = true;
+          }
+        });
+      }
+
+      if (hasCorruption) {
+        localStorage.setItem(this.chaptersKey, JSON.stringify(chapters));
+      }
+
+      return chapters;
+    } catch (error) {
+      console.error("Error cleaning up data:", error);
+      return this.initializeDefaultChapters();
     }
   }
 }
