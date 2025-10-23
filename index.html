@@ -49,6 +49,19 @@
         </div>
       </section>
 
+      <!-- Chapters Tabs -->
+      <section class="chapters-tabs" id="chaptersSection">
+        <div class="chapters-header">
+          <h2>📚 Bab Pembelajaran</h2>
+          <button class="btn-primary" id="addChapterBtn">
+            + Tambah Bab Baru
+          </button>
+        </div>
+        <div class="chapters-container" id="chaptersTabs">
+          <!-- Chapters will be rendered here by JavaScript -->
+        </div>
+      </section>
+
       <!-- Add Card Modal -->
       <div class="modal" id="addCardModal">
         <div class="modal-content">
@@ -206,6 +219,141 @@
         </div>
       </div>
 
+      <!-- Add Chapter Modal -->
+      <div class="modal" id="addChapterModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Tambah Bab Baru</h3>
+            <button class="close-btn" id="closeChapterModal">&times;</button>
+          </div>
+          <form id="chapterForm" class="modal-form">
+            <div class="form-group">
+              <label for="chapterLanguage">Bahasa Pemrograman</label>
+              <select id="chapterLanguage" required>
+                <option value="javascript">JavaScript</option>
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+                <option value="php">PHP</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="chapterName">Nama Bab</label>
+              <input
+                type="text"
+                id="chapterName"
+                placeholder="Contoh: Variabel dan Tipe Data"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="chapterDescription">Deskripsi Bab</label>
+              <textarea
+                id="chapterDescription"
+                placeholder="Masukkan deskripsi bab..."
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" id="cancelChapterBtn">
+                Batal
+              </button>
+              <button type="submit" class="btn-primary">Simpan Bab</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Edit Chapter Modal -->
+      <div class="modal" id="editChapterModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Edit Bab</h3>
+            <button class="close-btn" id="closeEditChapterModal">
+              &times;
+            </button>
+          </div>
+          <form id="editChapterForm" class="modal-form">
+            <input type="hidden" id="editChapterId" />
+            <div class="form-group">
+              <label for="editChapterLanguage">Bahasa Pemrograman</label>
+              <select id="editChapterLanguage" required>
+                <option value="javascript">JavaScript</option>
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+                <option value="php">PHP</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="editChapterName">Nama Bab</label>
+              <input
+                type="text"
+                id="editChapterName"
+                placeholder="Contoh: Variabel dan Tipe Data"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="editChapterDescription">Deskripsi Bab</label>
+              <textarea
+                id="editChapterDescription"
+                placeholder="Masukkan deskripsi bab..."
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-danger" id="deleteChapterBtn">
+                Hapus Bab
+              </button>
+              <button
+                type="button"
+                class="btn-secondary"
+                id="cancelEditChapterBtn"
+              >
+                Batal
+              </button>
+              <button type="submit" class="btn-primary">Update Bab</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Confirm Delete Chapter Modal -->
+      <div class="modal" id="confirmDeleteChapterModal">
+        <div class="modal-content confirm-modal">
+          <div class="modal-header">
+            <h3>Konfirmasi Hapus Bab</h3>
+          </div>
+          <div class="modal-body">
+            <p>
+              Apakah Anda yakin ingin menghapus bab ini? Semua kartu dalam bab
+              ini juga akan dihapus. Tindakan ini tidak dapat dibatalkan.
+            </p>
+          </div>
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn-secondary"
+              id="cancelDeleteChapterBtn"
+            >
+              Batal
+            </button>
+            <button
+              type="button"
+              class="btn-danger"
+              id="confirmDeleteChapterBtn"
+            >
+              Ya, Hapus Bab
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Cards Grid -->
       <section class="cards-grid" id="cardsGrid">
         <!-- Kartu akan di-generate oleh JavaScript -->
@@ -214,8 +362,9 @@
 
     <!-- JavaScript -->
     <script src="js/storage.js"></script>
-    <script src="js/card-manager.js"></script>
     <script src="js/theme-switcher.js"></script>
+    <script src="js/card-manager.js"></script>
+    <script src="js/chapter-manager.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>

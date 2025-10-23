@@ -6,18 +6,28 @@
 }
 
 :root {
+  /* Primary Colors */
   --primary-blue: #1e2a3a;
   --secondary-blue: #2d3b4e;
   --accent-blue: #3498db;
-  --text-light: #ffffff;
-  --text-light-biasa: #333333;
-  --text-dark: #ffffff;
+
+  /* Text Colors - SEPARATED */
+  --text-light: #333333; /* Untuk teks biasa mode terang */
+  --text-dark: #ffffff; /* Untuk teks biasa mode gelap */
+  --code-text-light: #f8f8f2; /* Untuk teks kode mode terang */
+  --code-text-dark: #abb2bf; /* Untuk teks kode mode gelap */
+  --hint-text-light: #666666; /* Untuk teks hint mode terang */
+  --hint-text-dark: #cccccc; /* Untuk teks hint mode gelap */
+
+  /* Background Colors */
   --bg-light: #f8f9fa;
   --bg-dark: #1a1a1a;
   --card-bg-light: #ffffff;
   --card-bg-dark: #2c3e50;
   --border-light: #e1e8ed;
   --border-dark: #34495e;
+
+  /* Status Colors */
   --success: #27ae60;
   --warning: #f39c12;
   --danger: #e74c3c;
@@ -49,7 +59,7 @@ body.light-mode {
   margin-bottom: 30px;
   padding: 20px;
   background: rgba(255, 255, 255, 0.1);
-  /* backdrop-filter: blur(10px); */
+  backdrop-filter: blur(10px);
   border-radius: 15px;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -68,7 +78,7 @@ body.light-mode {
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
-  /* backdrop-filter: blur(10px); */
+  backdrop-filter: blur(10px);
 }
 
 .theme-toggle:hover {
@@ -83,7 +93,7 @@ body.light-mode {
 /* Control Panel */
 .control-panel {
   background: rgba(255, 255, 255, 0.1);
-  /* backdrop-filter: blur(10px); */
+  backdrop-filter: blur(10px);
   padding: 20px;
   border-radius: 15px;
   margin-bottom: 30px;
@@ -111,6 +121,7 @@ body.light-mode {
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid var(--border-light);
   min-width: 180px;
+  color: var(--text-light); /* Gunakan variabel teks biasa */
 }
 
 .btn-primary {
@@ -125,17 +136,183 @@ body.light-mode {
   box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
 }
 
+/* Chapters Tabs */
+.chapters-tabs {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.chapters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.chapters-header h2 {
+  color: white;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.chapters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.language-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.language-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.language-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.language-icon {
+  font-size: 1.5rem;
+}
+
+.chapters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+.chapter-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.chapter-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  border-color: var(--accent-blue);
+}
+
+.chapter-card.active {
+  background: rgba(52, 152, 219, 0.2);
+  border-color: var(--accent-blue);
+}
+
+.chapter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.chapter-name {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+}
+
+.chapter-actions {
+  display: flex;
+  gap: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.chapter-card:hover .chapter-actions {
+  opacity: 1;
+}
+
+.btn-chapter-action {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 5px;
+  padding: 5px 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+}
+
+.btn-edit-chapter {
+  color: var(--accent-blue);
+}
+
+.btn-delete-chapter {
+  color: var(--danger);
+}
+
+.btn-chapter-action:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.chapter-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.chapter-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.chapter-card-count {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.empty-chapter {
+  text-align: center;
+  padding: 30px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.empty-chapter p {
+  margin: 10px 0 0 0;
+}
+
 /* Cards Grid */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  gap: 25px;
+  padding: 20px 0;
   align-items: start;
 }
 
 /* Card Styles - IMPROVED */
 .flashcard {
-  height: 475px;
+  height: 500px;
   perspective: 1000px;
   cursor: pointer;
   position: relative;
@@ -162,7 +339,7 @@ body.light-mode {
   position: absolute;
   width: 100%;
   height: 100%;
-  /* backface-visibility: hidden; */
+  backface-visibility: hidden;
   border-radius: 15px;
   padding: 25px;
   display: flex;
@@ -189,7 +366,6 @@ body.light-mode {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #000000);
 }
 
 .language-badge {
@@ -233,7 +409,7 @@ body.light-mode {
 .card-question {
   font-size: 1.3rem;
   font-weight: 600;
-  color: var(--text-light-biasa);
+  color: var(--text-light); /* Gunakan variabel teks biasa */
   line-height: 1.4;
 }
 
@@ -253,7 +429,6 @@ body.light-mode {
   flex-grow: 1;
   overflow: auto;
   min-height: 0;
-  height: 100%;
 }
 
 .code-container pre {
@@ -265,6 +440,7 @@ body.light-mode {
 .code-container code {
   background: none !important;
   padding: 0 !important;
+  color: var(--code-text-light); /* Gunakan variabel teks kode */
 }
 
 .explanation {
@@ -273,16 +449,16 @@ body.light-mode {
   border-radius: 8px;
   font-size: 0.95rem;
   line-height: 1.5;
-  /* backdrop-filter: blur(10px); */
+  backdrop-filter: blur(10px);
   flex-shrink: 0;
-  margin-top: 5px;
-  margin-bottom: 50px;
+  color: var(--text-dark); /* Teks penjelasan menggunakan warna teks biasa */
+  margin-bottom: 45px;
 }
 
-/* Card Actions */
+/* Card Actions - POSISI LEBIH BAWAH */
 .card-actions {
   position: absolute;
-  bottom: 30px;
+  bottom: 10px;
   left: 0;
   right: 0;
   display: flex;
@@ -305,7 +481,7 @@ body.light-mode {
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
-  /* backdrop-filter: blur(10px); */
+  backdrop-filter: blur(10px);
 }
 
 .btn-edit {
@@ -330,18 +506,29 @@ body.light-mode {
 
 .card-hint {
   position: absolute;
-  bottom: 5px;
+  bottom: 55px;
   left: 0;
   right: 0;
   text-align: center;
   font-size: 0.8rem;
-  color: #666;
+  color: var(--hint-text-light); /* Gunakan variabel teks hint */
   opacity: 0.7;
   transition: opacity 0.3s ease;
+  padding: 0 20px;
 }
 
 .flashcard:hover .card-hint {
   opacity: 1;
+}
+
+/* Untuk kartu belakang */
+.flashcard-back .card-actions {
+  bottom: 10px;
+}
+
+.flashcard-back .card-hint {
+  bottom: 50px;
+  color: var(--hint-text-dark); /* Hint gelap untuk mode dark */
 }
 
 /* Danger Button */
@@ -386,7 +573,7 @@ body.light-mode {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
-  /* backdrop-filter: blur(5px); */
+  backdrop-filter: blur(5px);
   z-index: 1000;
   align-items: center;
   justify-content: center;
@@ -451,6 +638,8 @@ body.light-mode {
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s ease;
+  color: var(--text-light); /* Warna teks input */
+  background: white;
 }
 
 .form-group select:focus,
@@ -535,13 +724,13 @@ body.light-mode {
   }
 
   .flashcard {
-    height: 650px;
+    height: 350px;
   }
 
   .card-actions {
-    /* opacity: 1; */
+    opacity: 1;
     padding: 0 15px;
-    
+    bottom: 8px;
   }
 
   .btn-action {
@@ -550,7 +739,38 @@ body.light-mode {
   }
 
   .card-hint {
-    bottom: 5px;
+    bottom: 55px;
+    font-size: 0.75rem;
+  }
+
+  .chapters-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+
+  .chapters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chapter-actions {
+    opacity: 1; /* Always show on mobile */
+  }
+
+  .language-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .chapters-tabs {
+    padding: 15px;
+  }
+
+  .chapter-card {
+    padding: 15px;
   }
 }
 
@@ -570,6 +790,19 @@ body.light-mode {
 
   .card-question {
     font-size: 1.1rem;
+  }
+
+  .card-actions {
+    bottom: 5px;
+  }
+
+  .card-hint {
+    bottom: 50px;
+  }
+
+  .btn-action {
+    padding: 8px 16px;
+    font-size: 0.8rem;
   }
 }
 
@@ -594,7 +827,7 @@ body.light-mode {
 
 /* Loading state for cards */
 .flashcard.loading {
-  opacity: 1;
+  opacity: 0.7;
   pointer-events: none;
 }
 
@@ -609,4 +842,85 @@ body.light-mode {
   padding: 10px 20px;
   border-radius: 5px;
   z-index: 10;
+}
+
+/* Progress Bar untuk Chapter */
+.chapter-progress {
+  margin-top: 10px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #27ae60, #2ecc71);
+  transition: width 0.3s ease;
+}
+
+/* Filter Info */
+.filter-info {
+  grid-column: 1 / -1;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.filter-info strong {
+  font-size: 1rem;
+}
+
+/* Chapter Count */
+.chapter-count {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  margin-left: 10px;
+}
+
+/* Empty State Improvements */
+.empty-chapters {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-chapters h3 {
+  color: white;
+  margin-bottom: 10px;
+}
+
+.empty-chapters p {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 20px;
+}
+
+/* Responsive Improvements */
+@media (max-width: 768px) {
+  .filter-info {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .chapter-count {
+    margin-left: 5px;
+  }
+
+  .language-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
 }
